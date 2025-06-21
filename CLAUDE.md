@@ -2,7 +2,14 @@
 
 ## プロジェクト概要
 TypeScript + React を使用した DDD アーキテクチャ採用のフルスタック Web アプリケーション開発用 starter kit です。  
-Claude Code を活用した効率的な開発を前提としています。
+**関数型プログラミング**のアプローチを採用し、Claude Code を活用した効率的な開発を前提としています。
+
+### 関数型プロジェクトの特徴
+- **イミュータブル（不変性）**: データの変更ではなく新しいオブジェクトを作成
+- **純粋関数**: 副作用がなく、同じ入力に対して常に同じ出力を返す
+- **関数合成**: 小さな関数を組み合わせて複雑な処理を構築
+- **型安全性**: TypeScriptとZodによる厳密な型チェック
+- **宣言的プログラミング**: 何をするかに焦点を当てた実装
 
 ## アーキテクチャ
 - **アーキテクチャパターン**: Domain-Driven Design (DDD)
@@ -15,8 +22,8 @@ Claude Code を活用した効率的な開発を前提としています。
 
 ## ディレクトリ構造
 ```
-fullstack-ddd-starter/
-├── frontend/                     # Next.js アプリケーション
+fullstack-template/
+├── client/                       # Next.js アプリケーション
 │   ├── src/
 │   │   ├── components/           # 再利用可能UIコンポーネント
 │   │   ├── pages/               # ページコンポーネント
@@ -26,10 +33,11 @@ fullstack-ddd-starter/
 │   │   └── utils/               # フロントエンド用ユーティリティ
 │   └── package.json
 │
-├── backend/                      # DDD構成のバックエンド
+├── server/                       # DDD構成のバックエンド
 │   ├── src/
 │   │   ├── domain/              # ドメイン層 (ビジネスロジックの核心)
 │   │   │   ├── entities/        # エンティティ (一意性を持つオブジェクト)
+│   │   │   ├── schemas/         # ドメインスキーマ (型定義)
 │   │   │   ├── values/          # 値オブジェクト (不変オブジェクト)
 │   │   │   ├── services/        # ドメインサービス (エンティティに属さないロジック)
 │   │   │   └── repositories/    # リポジトリインターフェース (データアクセス抽象化)
@@ -51,15 +59,15 @@ fullstack-ddd-starter/
 │   │   ├── schema.prisma        # Prismaスキーマ定義
 │   │   └── migrations/          # マイグレーションファイル
 │   ├── scripts/                 # ビルドスクリプト
-│   └── tests/                   # テストファイル
+│   ├── tests/                   # テストファイル
+│   └── package.json
 │
 ├── packages/
 │   └── shared/                  # フロントエンド・バックエンド共通
 │       ├── types/              # 共通型定義
 │       └── constants/          # 共通定数
 │
-├── docker/
-│   └── docker-compose.yml      # PostgreSQL + Redis
+├── docker-compose.yml           # PostgreSQL
 │
 └── scripts/                    # 開発・デプロイスクリプト
 ```
@@ -78,16 +86,20 @@ fullstack-ddd-starter/
 npm install
 
 # 2. フロントエンドの依存関係をインストール
-npm install --prefix frontend
+npm install --prefix client
 
 # 3. バックエンドの依存関係をインストール
-npm install --prefix backend
+npm install --prefix server
+
+# 4. 環境変数の準備
+cp env.example .env --prefix client
+cp env.example .env --prefix server
 
 # 4. データベースを起動（プロジェクトルートから）
 docker-compose up -d
 
 # 5. バックエンドでデータベースセットアップ
-npm run migrate:deploy --prefix backend
+npm run migrate:deploy --prefix server
 
 # 6. 開発サーバー起動（プロジェクトルートから）
 npm run notios
@@ -97,17 +109,22 @@ npm run notios
 ```bash
 # プロジェクトルートから
 npm run notios        # フロントエンド + バックエンド + 型生成を同時起動
-npm run dev           # 上記と同じ（エイリアス）
 
 # 個別起動
-npm run dev:frontend  # フロントエンドのみ（Next.js）
-npm run dev:backend   # バックエンドのみ（Frourio + Prisma）
+npm run dev:client  # フロントエンドのみ（Next.js）
+npm run dev:server   # バックエンドのみ（Frourio + Prisma）
 
 # 型生成
 npm run generate      # フロントエンド・バックエンド両方の型生成
-npm run generate:frontend  # フロントエンドの型生成のみ
-npm run generate:backend   # バックエンドの型生成のみ
+npm run generate:client  # フロントエンドの型生成のみ
+npm run generate:server   # バックエンドの型生成のみ
 
+```
+
+### テスト実行
+```bash
+# プロジェクトルートから
+npm run test              # 全テスト実行
 ```
 
 ### 開発サーバー起動後のアクセス
@@ -126,24 +143,30 @@ claude code --context "このプロジェクトはDDDアーキテクチャを採
 npm run notios  # フロントエンド + バックエンド同時起動
 
 # 特定の機能開発
-claude code "新しいUserエンティティを backend/src/domain/entities に作成してください。emailとnameを持つようにしてください。"
+claude code "新しいUserエンティティを server/src/domain/entities に作成してください。emailとnameを持つようにしてください。"
 
 # テスト作成
 claude code "UserEntityのテストをVitestで作成してください。"
 
 # API作成
-claude code "User作成のためのFrourio APIを backend/src/presentation/api に作成してください。"
+claude code "User作成のためのFrourio APIを server/src/presentation/api に作成してください。"
 ```
 
 
 
 ### DDD実装のルール
 
+#### 関数型アプローチ
+- クラスベースではなく関数型でDDDを実装
+- 型定義は `schemas` ディレクトリに分離
+- エンティティは純粋なビジネスロジック関数として実装
+- 不変性を重視した設計
+
 #### エンティティ
 - 一意性を持つオブジェクト
 - 不変性を保つ
 - ビジネスルールを内包
-- ファクトリーメソッドで生成
+- ファクトリー関数で生成
 
 #### 値オブジェクト
 - 不変オブジェクト
@@ -160,6 +183,7 @@ claude code "User作成のためのFrourio APIを backend/src/presentation/api �
 - データアクセスの抽象化
 - インターフェースをdomainに、実装をinfrastructureに
 - ドメインオブジェクトを扱う
+- トランザクション注入パターンを採用
 
 #### アプリケーションサービス
 - ユースケースの実装
@@ -230,43 +254,23 @@ claude code "この機能のドキュメントを更新してください。"
 #### Aspida による API型安全性
 ```bash
 # APIクライアント型生成
-npm run generate:aspida --prefix frontend
+npm run generate:aspida --prefix client
 
 # バックエンドAPI型生成
-npm run generate:aspida --prefix backend
-npm run generate:frourio --prefix backend
+npm run generate:aspida --prefix server
+npm run generate:frourio --prefix server
 ```
 
 #### Prisma による DB型安全性
 ```bash
 # Prismaクライアント型生成
-npm run generate:prisma --prefix backend
+npm run generate:prisma --prefix server
 
 # マイグレーション実行
-npm run migrate:deploy --prefix backend
+npm run migrate:deploy --prefix server
 ```
 
 ## デプロイ
-
-### 本番環境変数
-```env
-# データベース
-DATABASE_URL="postgresql://user:password@host:5432/database"
-
-# アプリケーション
-NODE_ENV=production
-PORT=8080
-FRONTEND_URL=https://your-app.com
-
-# 認証
-JWT_SECRET=your-jwt-secret
-
-# 外部サービス
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-```
 
 ### デプロイコマンド
 ```bash
@@ -274,13 +278,13 @@ SMTP_PASS=your-app-password
 npm run build  # フロントエンド・バックエンド両方ビルド
 
 # フロントエンドのみビルド
-npm run build --prefix frontend
+npm run build --prefix client
 
 # バックエンドのみビルド
-npm run build --prefix backend
+npm run build --prefix server
 
 # データベースマイグレーション
-npm run migrate:deploy --prefix backend
+npm run migrate:deploy --prefix server
 ```
 
 ## トラブルシューティング
@@ -302,13 +306,13 @@ docker-compose down && docker-compose up -d
 #### 2. Prisma関連エラー
 ```bash
 # スキーマ同期
-npm run generate:prisma --prefix backend
+npm run generate:prisma --prefix server
 
 # データベースリセット
-npm run migrate:reset --prefix backend
+npm run migrate:reset --prefix server
 
 # マイグレーション実行
-npm run migrate:deploy --prefix backend
+npm run migrate:deploy --prefix server
 ```
 
 #### 3. 型エラー
@@ -317,8 +321,8 @@ npm run migrate:deploy --prefix backend
 npm run typecheck
 
 # 個別型チェック
-npm run typecheck:frontend
-npm run typecheck:backend
+npm run typecheck:client
+npm run typecheck:server
 
 # 型生成
 npm run generate
@@ -337,11 +341,11 @@ npm run lint:fix      # リント・フォーマットの自動修正
 #### 5. aspida/Frourio 型生成エラー
 ```bash
 # バックエンドの型生成
-npm run generate:frourio --prefix backend
-npm run generate:aspida --prefix backend
+npm run generate:frourio --prefix server
+npm run generate:aspida --prefix server
 
 # フロントエンドの型生成
-npm run generate:aspida --prefix frontend
+npm run generate:aspida --prefix client
 ```
 
 ### Claude Code でのデバッグ
@@ -362,5 +366,9 @@ claude code "このコードに問題がないかレビューしてください�
 - [Next.js Documentation](https://nextjs.org/docs)
 - [aspida Documentation](https://github.com/aspida/aspida)
 
+
+```
+
 ## 更新履歴
+- 2025-06-21 - 関数型DDD実装、スキーマ分離、トランザクション注入パターン対応
 - 2025-06-20 - 初版作成（Claude Code対応）

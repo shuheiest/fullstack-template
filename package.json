@@ -1,0 +1,38 @@
+{
+  "name": "fullstack-template",
+  "version": "1.0.0",
+  "description": "DDD架構のフルスタックWebアプリケーション開発用スターターキット",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run setup:symlink",
+    "setup:symlink": "cd client && rm -rf api && ln -sf ../server/api api",
+    "notios": "notios dev",
+    "dev": "run-p dev:*",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "generate": "run-p generate:*",
+    "generate:client": "npm run generate --prefix client",
+    "generate:server": "npm run generate --prefix server",
+    "lint": "run-p lint:js lint:prettier lint:style",
+    "lint:js": "eslint --ext .ts,.tsx,.js --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check \"./**/*.{ts,tsx,js}\" --ignore-path .gitignore",
+    "lint:style": "stylelint \"client/**/*.ts{,x}\"",
+    "lint:fix": "npm run lint:js -- --fix && prettier --write \"./**/*.{ts,tsx,js}\" --ignore-path .gitignore && npm run lint:style -- --fix",
+    "test": "npm test --prefix client && npm test --prefix server",
+    "typecheck": "run-p typecheck:*",
+    "typecheck:client": "npm run typecheck --prefix client",
+    "typecheck:server": "npm run typecheck --prefix server"
+  },
+  "devDependencies": {
+    "notios": "^0.1.0",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.0",
+    "stylelint": "^15.11.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

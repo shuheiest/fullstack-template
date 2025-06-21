@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: fullstack-postgres
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fullstack_template
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      TZ: Asia/Tokyo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fullstack-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fullstack-network:
+    driver: bridge
