@@ -1,8 +1,8 @@
+import { createUserService } from '@/application/services/UserService';
+import { prisma } from '@/infrastructure/database/prisma';
+import { userRepo } from '@/infrastructure/repositories/UserRepositoryImpl';
 import type { Prisma } from '@prisma/client';
 import { defineController } from './$relay';
-import { createUserService } from '@/application/services/UserService';
-import { userRepo } from '@/infrastructure/repositories/UserRepositoryImpl';
-import { prisma } from '@/infrastructure/database/prisma';
 
 const userService = createUserService(userRepo);
 
@@ -18,27 +18,14 @@ export default defineController(() => ({
       return { status: 500, body: [] };
     }
   },
-  
+
   post: async ({ body }) => {
-    try {
-      const user = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-        return await userService.createUser(tx, {
-          email: body.email,
-          name: body.name,
-        });
+    const user = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      return await userService.createUser(tx, {
+        email: body.email,
+        name: body.name,
       });
-      return { status: 201, body: user };
-    } catch (error) {
-      console.error('Error creating user:', error);
-      if (error instanceof Error) {
-        if (error.message.includes('already exists')) {
-          return { status: 409, body: null };
-        }
-        if (error.message.includes('Invalid')) {
-          return { status: 400, body: null };
-        }
-      }
-      return { status: 500, body: null };
-    }
+    });
+    return { status: 201, body: user };
   },
 }));

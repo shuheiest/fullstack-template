@@ -1,20 +1,20 @@
-import type { Prisma } from '@prisma/client'
-import type { User } from '@/domain/schemas/UserSchema'
-import type { UserRepository } from '@/domain/repositories/UserRepository'
+import type { UserRepository } from '@/domain/repositories/UserRepository';
+import type { User } from '@/domain/schemas/UserSchema';
+import type { Prisma } from '@prisma/client';
 
 export const userRepo: UserRepository = {
   findById: async (tx: Prisma.TransactionClient, id: string): Promise<User | null> => {
     const user = await tx.user.findUnique({
       where: { id },
-    })
-    return user ? mapToDomain(user) : null
+    });
+    return user ? mapToDomain(user) : null;
   },
 
   findByEmail: async (tx: Prisma.TransactionClient, email: string): Promise<User | null> => {
     const user = await tx.user.findUnique({
       where: { email },
-    })
-    return user ? mapToDomain(user) : null
+    });
+    return user ? mapToDomain(user) : null;
   },
 
   save: async (tx: Prisma.TransactionClient, user: User): Promise<void> => {
@@ -32,25 +32,25 @@ export const userRepo: UserRepository = {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
-    })
+    });
   },
 
   delete: async (tx: Prisma.TransactionClient, id: string): Promise<void> => {
     await tx.user.delete({
       where: { id },
-    })
+    });
   },
 
   findAll: async (tx: Prisma.TransactionClient): Promise<User[]> => {
-    const users = await tx.user.findMany()
-    return users.map(mapToDomain)
+    const users = await tx.user.findMany();
+    return users.map(mapToDomain);
   },
-}
+};
 
-const mapToDomain = (prismaUser: any): User => ({
+const mapToDomain = (prismaUser: Prisma.UserGetPayload<object>): User => ({
   id: prismaUser.id,
   email: prismaUser.email,
   name: prismaUser.name,
   createdAt: prismaUser.createdAt,
   updatedAt: prismaUser.updatedAt,
-})
+});
