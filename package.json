@@ -4,8 +4,6 @@
   "description": "DDD架構のフルスタックWebアプリケーション開発用スターターキット",
   "private": true,
   "scripts": {
-    "postinstall": "npm run setup:symlink",
-    "setup:symlink": "cd client && rm -rf api && ln -sf ../server/api api",
     "notios": "notios dev",
     "dev": "run-p dev:*",
     "dev:client": "npm run dev --prefix client",
