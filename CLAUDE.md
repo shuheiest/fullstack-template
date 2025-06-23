@@ -24,37 +24,37 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 ```
 fullstack-template/
 ├── client/                       # Next.js アプリケーション
-│   ├── src/
-│   │   ├── components/           # 再利用可能UIコンポーネント
-│   │   ├── pages/               # ページコンポーネント
-│   │   ├── hooks/               # カスタムフック
-│   │   ├── api/                 # API呼び出し (aspida client)
-│   │   ├── types/               # フロントエンド固有型定義
-│   │   └── utils/               # フロントエンド用ユーティリティ
+│   ├── components/          # 再利用可能UIコンポーネント
+│   ├── pages/               # ページコンポーネント
+│   ├── hooks/               # カスタムフック
+│   ├── api/                 # API呼び出し (aspida client)
+│   ├── types/               # フロントエンド固有型定義
+│   ├── utils/               # フロントエンド用ユーティリティ
 │   └── package.json
 │
 ├── server/                       # DDD構成のバックエンド
-│   ├── src/
-│   │   ├── domain/              # ドメイン層 (ビジネスロジックの核心)
-│   │   │   ├── entities/        # エンティティ (一意性を持つオブジェクト)
-│   │   │   ├── schemas/         # ドメインスキーマ (型定義)
-│   │   │   ├── values/          # 値オブジェクト (不変オブジェクト)
-│   │   │   ├── services/        # ドメインサービス (エンティティに属さないロジック)
-│   │   │   └── repositories/    # リポジトリインターフェース (データアクセス抽象化)
-│   │   ├── application/         # アプリケーション層 (ユースケース実装)
-│   │   │   ├── services/        # アプリケーションサービス (ユースケース調整)
-│   │   │   ├── commands/        # コマンド (データ変更要求)
-│   │   │   ├── queries/         # クエリ (データ取得要求)
-│   │   │   └── dto/             # DTO (データ転送オブジェクト)
-│   │   ├── infrastructure/      # インフラストラクチャ層 (技術的実装)
-│   │   │   ├── repositories/    # リポジトリ実装 (Prisma使用)
-│   │   │   ├── database/        # DB設定・接続
-│   │   │   └── external/        # 外部API・サービス連携
-│   │   ├── presentation/        # プレゼンテーション層 (UI/API)
-│   │   │   └── api/             # Frourio API定義
-│   │   └── shared/              # 共通モジュール
-│   │       ├── errors/          # カスタムエラー定義
-│   │       └── utils/           # 共通ユーティリティ
+│   ├── api/                     # Frourio API定義
+│   │   └── users/               # ユーザー関連API
+│   ├── domain/                  # ドメイン層 (ビジネスロジックの核心)
+│   │   ├── entities/            # エンティティ (一意性を持つオブジェクト)
+│   │   ├── schemas/             # ドメインスキーマ (型定義)
+│   │   ├── values/              # 値オブジェクト (不変オブジェクト)
+│   │   ├── services/            # ドメインサービス (エンティティに属さないロジック)
+│   │   └── repositories/        # リポジトリインターフェース (データアクセス抽象化)
+│   ├── application/             # アプリケーション層 (ユースケース実装)
+│   │   ├── services/            # アプリケーションサービス (ユースケース調整)
+│   │   ├── commands/            # コマンド (データ変更要求)
+│   │   ├── queries/             # クエリ (データ取得要求)
+│   │   └── dto/                 # DTO (データ転送オブジェクト)
+│   ├── infrastructure/          # インフラストラクチャ層 (技術的実装)
+│   │   ├── repositories/        # リポジトリ実装 (Prisma使用)
+│   │   ├── database/            # DB設定・接続
+│   │   └── external/            # 外部API・サービス連携
+│   ├── shared/                  # 共通モジュール
+│   │   ├── errors/              # カスタムエラー定義
+│   │   └── utils/               # 共通ユーティリティ
+│   ├── service/                 # サービス設定
+│   ├── entrypoints/             # エントリーポイント
 │   ├── prisma/
 │   │   ├── schema.prisma        # Prismaスキーマ定義
 │   │   └── migrations/          # マイグレーションファイル
