@@ -16,9 +16,46 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - fullstack-network
+      
+  magnito:
+    container_name: fullstack-magnito
+    image: frourio/magnito:latest
+    restart: unless-stopped
+    ports:
+      - "5050:5050" # Cognito API
+      - "5051:5051" # Web管理画面
+      - "5052:5052" # OAuth2 SSL endpoint
+    environment:
+      COGNITO_USER_POOL_ID: ap-northeast-1_fullstack_template
+      COGNITO_USER_POOL_CLIENT_ID: fullstack-template-client
+      COGNITO_ACCESS_KEY: magnito-access-key
+      COGNITO_SECRET_KEY: magnito-secret-key
+      COGNITO_REGION: ap-northeast-1
+      SMTP_HOST: inbucket
+      SMTP_PORT: 2500
+      SMTP_USER: fake_mail_user
+      SMTP_PASS: fake_mail_password
+    volumes:
+      - magnito_data:/usr/src/app/data
+    networks:
+      - fullstack-network
+    depends_on:
+      - inbucket
+
+  # 開発環境専用: メール受信テスト用
+  inbucket:
+    container_name: fullstack-inbucket
+    image: inbucket/inbucket:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000" # Web管理画面
+      - "2500:2500" # SMTP受信ポート
+    networks:
+      - fullstack-network
 
 volumes:
   postgres_data:
+  magnito_data:
 
 networks:
   fullstack-network:
