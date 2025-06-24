@@ -25,6 +25,7 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 - **Prisma** (ORM)
 - **PostgreSQL** (データベース)
 - **Vitest** (テスト)
+- **Magnito** (Cognito エミュレーター)
 
 ### Tools
 - **Docker** + Docker Compose
@@ -58,6 +59,8 @@ npm run notios
 開発サーバー起動後のアクセス:
 - フロントエンド: http://localhost:3000
 - バックエンドAPI: http://localhost:8080
+- Magnito管理画面: http://localhost:5051
+- メール確認 (Inbucket): http://localhost:9000
 
 ## 開発コマンド
 
@@ -106,23 +109,26 @@ client/                   # Next.js アプリケーション
 │   └── utils/             # フロントエンド用ユーティリティ
 
 server/                    # DDD構成のバックエンド
-├── src/
-│   ├── domain/            # ドメイン層
-│   │   ├── entities/      # ビジネスロジック関数
-│   │   ├── schemas/       # 型定義 (Zod)
-│   │   ├── repositories/  # リポジトリインターフェース
-│   │   └── services/      # ドメインサービス
-│   ├── application/       # アプリケーション層
-│   │   ├── services/      # ユースケース実装
-│   │   ├── commands/      # コマンド
-│   │   ├── queries/       # クエリ
-│   │   └── dto/           # データ転送オブジェクト
-│   ├── infrastructure/    # インフラストラクチャ層
-│   │   ├── repositories/  # リポジトリ実装
-│   │   ├── database/      # DB設定・接続
-│   │   └── external/      # 外部API・サービス連携
-│   └── presentation/      # プレゼンテーション層
-│       └── api/           # Frourio API定義
+├── api/                   # Frourio API定義
+│   ├── auth/              # 認証API
+│   └── users/             # ユーザーAPI
+├── domain/                # ドメイン層
+│   ├── entities/          # ビジネスロジック関数
+│   ├── schemas/           # 型定義
+│   ├── validators/        # バリデーション関数
+│   ├── services/          # ドメインサービス
+│   └── repositories/      # リポジトリインターフェース
+├── application/           # アプリケーション層
+│   ├── services/          # ユースケース実装
+│   ├── commands/          # コマンド
+│   ├── queries/           # クエリ
+│   └── dto/               # データ転送オブジェクト
+├── infrastructure/        # インフラストラクチャ層
+│   ├── repositories/      # リポジトリ実装
+│   ├── database/          # DB設定・接続
+│   └── external/          # 外部API・サービス連携
+├── service/               # サービス設定
+└── validators/            # API バリデーター
 └── prisma/
     ├── schema.prisma      # Prismaスキーマ定義
     └── migrations/        # マイグレーションファイル
@@ -140,6 +146,11 @@ server/                    # DDD構成のバックエンド
 - リポジトリメソッドにPrismaトランザクションを注入
 - データ整合性を保証
 - テスタビリティの向上
+
+### 認証システム
+- **Magnito**: 開発環境でのCognito エミュレーション
+- **型安全API**: Frourioによる認証エンドポイント
+- **関数型バリデーション**: 純粋関数による入力検証
 
 ## Claude Code との連携
 

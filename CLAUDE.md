@@ -16,6 +16,7 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 - **フロントエンド**: Next.js + TypeScript
 - **バックエンド**: Node.js + TypeScript + Frourio + Fastify
 - **データベース**: PostgreSQL (Docker)
+- **認証**: Magnito (Cognito エミュレーター)
 - **ORM**: Prisma
 - **テスト**: Vitest
 - **API**: Frourio (型安全)
@@ -130,6 +131,8 @@ npm run test              # 全テスト実行
 ### 開発サーバー起動後のアクセス
 - フロントエンド: http://localhost:3000
 - バックエンドAPI: http://localhost:8080
+- Magnito管理画面: http://localhost:5051
+- メール確認 (Inbucket): http://localhost:9000
 - Prisma Studio: `npx prisma studio` で起動
 
 ## Claude Code 開発ガイドライン
@@ -355,6 +358,33 @@ claude code "このエラーの原因と解決方法を教えてください: [�
 
 # コードレビュー
 claude code "このコードに問題がないかレビューしてください。DDDの原則に従っているかもチェックしてください。"
+```
+
+## 認証システム
+
+### Magnito (Cognito エミュレーター)
+
+開発環境では AWS Cognito の代わりに Magnito を使用します。
+
+```bash
+# 認証関連サービスの起動確認
+docker-compose ps
+
+# Magnito ログ確認
+docker-compose logs magnito
+
+# メール確認 (Inbucket)
+# http://localhost:9000 でメール受信を確認
+```
+
+### 認証API開発
+
+```bash
+# 新しい認証エンドポイント作成例
+claude code "新しい認証API（パスワードリセット）を作成してください。ドメインバリデーション、UseCase、Frourio APIエンドポイントを含めてください。"
+
+# 認証バリデーション拡張例
+claude code "認証バリデーションに多要素認証の検証ロジックを追加してください。"
 ```
 
 ## 参考資料
