@@ -351,6 +351,15 @@ npm run generate:aspida --prefix server
 npm run generate:aspida --prefix client
 ```
 
+#### 6. WSL環境での注意点
+- Node.js 20+が必要
+- DockerとDocker Composeが必要
+- 初回セットアップ時の個別起動も可能：
+  ```bash
+  npm run dev:client  # フロントエンド
+  npm run dev:server  # バックエンド
+  ```
+
 ### Claude Code でのデバッグ
 ```bash
 # エラー調査
