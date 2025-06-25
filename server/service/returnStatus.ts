@@ -14,3 +14,9 @@ export const returnPostError = (e: unknown): { status: 403 } => {
   console.error('POST Error:', e);
   return { status: 403 };
 };
+
+export function customAssert(condition: unknown, message: string): asserts condition {
+  if (Boolean(condition) === false) {
+    throw new Error(message);
+  }
+}
