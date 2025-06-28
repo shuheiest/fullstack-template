@@ -35,6 +35,6 @@
       "@/shared/*": ["shared/*"]
     }
   },
-  "include": ["**/*.ts",".eslintrc.js","**/*.js",],
-  "exclude": ["node_modules", "dist", "tests",]
+  "include": ["**/*.ts", "**/*.js", ".eslintrc.js"],
+  "exclude": ["node_modules", "api/@types/$relay.ts"]
 }

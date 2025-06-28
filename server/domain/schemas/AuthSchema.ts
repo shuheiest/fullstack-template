@@ -30,6 +30,7 @@ export const ConfirmSignUpRequestSchema = z.object({
 export type ConfirmSignUpRequest = z.infer<typeof ConfirmSignUpRequestSchema>;
 
 export const AuthTokenSchema = z.object({
+  provider: z.literal('cognito'),
   accessToken: z.string(),
   idToken: z.string(),
   refreshToken: z.string(),

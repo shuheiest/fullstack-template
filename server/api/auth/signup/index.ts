@@ -1,4 +1,4 @@
-import type { SignUpRequest } from '@/domain/schemas/AuthSchema';
+import type { SignUpRequest } from 'api/@types/auth';
 import type { DefineMethods } from 'aspida';
 
 export type Methods = DefineMethods<{

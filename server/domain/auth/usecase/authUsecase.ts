@@ -51,6 +51,7 @@ export const authUsecase = {
       message: 'Sign in successful',
       success: true,
       tokens: {
+        provider: 'cognito' as const,
         accessToken: 'mock-access-token',
         idToken: 'mock-id-token',
         refreshToken: 'mock-refresh-token',
