@@ -15,10 +15,6 @@
     "generate:path": "pathpida --ignorePath ../.gitignore -s",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write src/**/*.{ts,tsx,json}",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage"
   },
@@ -47,13 +43,10 @@
     "@typescript-eslint/parser": "^6.13.1",
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^1.0.4",
-    "eslint": "^8.55.0",
-    "eslint-config-next": "14.0.3",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.0.1",
+    "autoprefixer": "^10.4.21",
     "jsdom": "^23.0.1",
-    "prettier": "^3.1.0",
-    "tailwindcss": "^3.3.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
     "vitest": "^1.0.4"
   },
   "engines": {
