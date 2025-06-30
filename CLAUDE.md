@@ -13,29 +13,31 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 
 ## アーキテクチャ
 - **アーキテクチャパターン**: Domain-Driven Design (DDD)
-- **フロントエンド**: Next.js + TypeScript
+- **フロントエンド**: Next.js App Router + TypeScript + Tailwind CSS
 - **バックエンド**: Node.js + TypeScript + Frourio + Fastify
 - **データベース**: PostgreSQL (Docker)
-- **認証**: Magnito (Cognito エミュレーター)
+- **認証**: Magnito (Cognito エミュレーター) + JWT検証
 - **ORM**: Prisma
 - **テスト**: Vitest
 - **API**: Frourio (型安全)
+- **スタイリング**: Tailwind CSS (ユーティリティファースト)
 
 ## ディレクトリ構造
 ```
 fullstack-template/
-├── client/                       # Next.js アプリケーション
-│   ├── components/          # 再利用可能UIコンポーネント
-│   ├── pages/               # ページコンポーネント
-│   ├── hooks/               # カスタムフック
-│   ├── api/                 # API呼び出し (aspida client)
-│   ├── types/               # フロントエンド固有型定義
-│   ├── utils/               # フロントエンド用ユーティリティ
+├── client/                       # Next.js App Router アプリケーション
+│   ├── app/                      # App Router ページ・レイアウト
+│   ├── components/               # 再利用可能UIコンポーネント
+│   ├── hooks/                    # カスタムフック
+│   ├── api/                      # API呼び出し (aspida client)
+│   ├── types/                    # フロントエンド固有型定義
+│   ├── utils/                    # フロントエンド用ユーティリティ
 │   └── package.json
 │
 ├── server/                       # DDD構成のバックエンド
-│   ├── api/                     # Frourio API定義
-│   │   └── users/               # ユーザー関連API
+│   ├── api/                      # Frourio API定義
+│   │   ├── auth/                 # 認証関連API
+│   │   └── @types/               # 共有型定義
 │   ├── domain/                  # ドメイン層 (ビジネスロジックの核心)
 │   │   ├── entities/            # エンティティ (一意性を持つオブジェクト)
 │   │   ├── schemas/             # ドメインスキーマ (型定義)

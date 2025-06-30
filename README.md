@@ -13,9 +13,9 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 ## 技術スタック
 
 ### Frontend
-- **Next.js** + TypeScript
+- **Next.js App Router** + TypeScript
 - **React** 18
-- **Tailwind CSS**
+- **Tailwind CSS** (ユーティリティファースト)
 - **Vitest** (テスト)
 
 ### Backend
@@ -99,19 +99,18 @@ npm run generate:server    # バックエンドのみ
 ## アーキテクチャ
 
 ```
-client/                   # Next.js アプリケーション
-├── src/
-│   ├── components/         # 再利用可能UIコンポーネント
-│   ├── pages/             # ページコンポーネント
-│   ├── hooks/             # カスタムフック
-│   ├── api/               # API呼び出し (aspida client)
-│   ├── types/             # フロントエンド固有型定義
-│   └── utils/             # フロントエンド用ユーティリティ
+client/                   # Next.js App Router アプリケーション
+├── app/                  # App Router ページ・レイアウト
+├── components/           # 再利用可能UIコンポーネント
+├── hooks/                # カスタムフック
+├── api/                  # API呼び出し (aspida client)
+├── types/                # フロントエンド固有型定義
+└── utils/                # フロントエンド用ユーティリティ
 
-server/                    # DDD構成のバックエンド
-├── api/                   # Frourio API定義
-│   ├── auth/              # 認証API
-│   └── users/             # ユーザーAPI
+server/                   # DDD構成のバックエンド
+├── api/                  # Frourio API定義
+│   ├── auth/             # 認証API
+│   └── @types/           # 共有型定義
 ├── domain/                # ドメイン層
 │   ├── entities/          # ビジネスロジック関数
 │   ├── schemas/           # 型定義
@@ -149,8 +148,10 @@ server/                    # DDD構成のバックエンド
 
 ### 認証システム
 - **Magnito**: 開発環境でのCognito エミュレーション
+- **JWT検証**: バックエンドでのトークン検証機能
 - **型安全API**: Frourioによる認証エンドポイント
 - **関数型バリデーション**: 純粋関数による入力検証
+- **フロントエンド認証**: Next.js App Routerでのログイン・サインアップ画面
 
 ## Claude Code との連携
 
