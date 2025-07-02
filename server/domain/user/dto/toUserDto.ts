@@ -1,9 +1,9 @@
-// ユーザーDTO変換関数
-import type { JwtUser } from 'api/@types/jwt';
-import type { UserDto } from 'api/@types/user';
-import { userIdParser } from '../../../validators/parser';
+// ユーザーまたは匿名ユーザーDTO変換関数
+import type { UserOrAnonymousDto } from 'api/@types/user';
+import type { UserOrAnonymous } from 'domain/entities/User';
 
-export const toUserDto = (jwtUser: JwtUser): UserDto => ({
-  userId: userIdParser.parse(jwtUser['cognito:username']),
-  email: jwtUser.email,
+export const toUserOrAnonymousDto = (userEntity: UserOrAnonymous): UserOrAnonymousDto => ({
+  userId: userEntity.id,
+  email: userEntity.email,
+  role: userEntity.role,
 });

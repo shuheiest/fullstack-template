@@ -1,9 +1,10 @@
 import type { DefineMethods } from 'aspida';
-import type { AuthHeader, AuthenticatedUser } from '../@types/jwt';
+import type { AuthHeader } from '../@types/jwt';
+import type { UserOrAnonymousDto } from '../@types/user';
 
 export type Methods = DefineMethods<{
   get: {
     reqHeaders: AuthHeader;
-    resBody: AuthenticatedUser;
+    resBody: UserOrAnonymousDto;
   };
 }>;

@@ -1,8 +1,8 @@
 // ユーザークエリ
-import { prisma } from 'infrastructure/database/prisma';
 import type { JwtUser } from 'api/@types/jwt';
 import type { UserOrAnonymous } from 'domain/entities/User';
-import { toUserEntity, createAnonymousUser } from '../repository/prismaToUserModel';
+import { prisma } from 'infrastructure/database/prisma';
+import { prismaToUserEntity, toAnonymousUser } from '../repository/prismaToUserModel';
 
 export const userQuery = {
   whoAmI: (vals: {
@@ -11,5 +11,5 @@ export const userQuery = {
   }): Promise<UserOrAnonymous> =>
     prisma.user
       .findFirst({ where: { id: vals.userId } })
-      .then((user) => user ? toUserEntity(user) : createAnonymousUser(vals)),
+      .then((user) => (user ? prismaToUserEntity(user) : toAnonymousUser(vals))),
 };
