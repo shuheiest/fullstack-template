@@ -13,12 +13,14 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 ## 技術スタック
 
 ### Frontend
+
 - **Next.js App Router** + TypeScript
 - **React** 18
 - **Tailwind CSS** (ユーティリティファースト)
 - **Vitest** (テスト)
 
 ### Backend
+
 - **Node.js** + TypeScript
 - **Frourio** (型安全API)
 - **Fastify** (高速Webフレームワーク)
@@ -28,6 +30,7 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 - **Magnito** (Cognito エミュレーター)
 
 ### Tools
+
 - **Docker** + Docker Compose
 - **ESLint** + Prettier
 - **aspida** (型安全APIクライアント)
@@ -57,6 +60,7 @@ npm run notios
 ```
 
 開発サーバー起動後のアクセス:
+
 - フロントエンド: http://localhost:3000
 - バックエンドAPI: http://localhost:8080
 - Magnito管理画面: http://localhost:5051
@@ -127,7 +131,7 @@ server/                   # DDD構成のバックエンド
 │   ├── database/          # DB設定・接続
 │   └── external/          # 外部API・サービス連携
 ├── service/               # サービス設定
-└── validators/            # API バリデーター
+├── validators/            # API バリデーター
 └── prisma/
     ├── schema.prisma      # Prismaスキーマ定義
     └── migrations/        # マイグレーションファイル
@@ -136,17 +140,20 @@ server/                   # DDD構成のバックエンド
 ## DDD実装の特徴
 
 ### 関数型アプローチ
+
 - クラスベースではなく関数型でDDDを実装
 - 型定義は`schemas`ディレクトリに分離
 - エンティティは純粋なビジネスロジック関数として実装
 - 不変性を重視した設計
 
 ### トランザクション注入パターン
+
 - リポジトリメソッドにPrismaトランザクションを注入
 - データ整合性を保証
 - テスタビリティの向上
 
 ### 認証システム
+
 - **Magnito**: 開発環境でのCognito エミュレーション
 - **JWT検証**: バックエンドでのトークン検証機能
 - **型安全API**: Frourioによる認証エンドポイント
@@ -161,7 +168,7 @@ server/                   # DDD構成のバックエンド
 # 新機能開発例
 claude code "新しいUserエンティティを server/src/domain/entities に作成してください"
 
-# テスト作成例  
+# テスト作成例
 claude code "UserEntityの単体テストをVitestで作成してください"
 
 # API作成例
