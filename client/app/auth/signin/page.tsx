@@ -1,101 +1,87 @@
 'use client';
 
 import type { AuthToken } from 'api/@types/auth';
-import Link from 'next/link';
-import { useState } from 'react';
+import { useAuthHeader } from 'hooks/useAuthHeader';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'store/useAuthState';
+import { useLoadingState } from 'store/useLoadingState';
+import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
+import { apiClient } from 'utils/apiClient';
 import { signIn } from 'utils/cognitoClient';
+import { idTokenParser } from 'utils/parser';
+import { SignInForm } from './SignInForm';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { headers } = useAuthHeader();
+  const { setAuthTokens, authInited } = useAuthState();
+  const { setUserOrAnonymous } = useUserOrAnonymousState();
+  const { loading, setLoading } = useLoadingState();
+
+  // URLパラメータから成功メッセージを取得
+  useEffect(() => {
+    const message = searchParams.get('message');
+    if (message === 'confirmed') {
+      setSuccessMessage('アカウント確認が完了しました。ログインしてください。');
+    }
+  }, [searchParams]);
+
+  // ユーザー同期処理
+  useEffect(() => {
+    if (!headers || !authInited) return;
+    setLoading(true);
+
+    apiClient.me
+      .$get({ headers })
+      .then((user) => {
+        setUserOrAnonymous(user);
+        router.push(user.role === 'user' ? '/dashboard' : '/');
+      })
+      .catch((err) => {
+        console.error('ユーザー同期エラー:', err);
+      });
+    setLoading(false);
+  }, [headers, authInited, setUserOrAnonymous, router, setLoading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     setError('');
 
     signIn({ email, password })
       .then((result: AuthToken) => {
         console.log('ログイン成功:', result);
-        // ここで成功時の処理（リダイレクトなど）
+        setAuthTokens({
+          provider: 'cognito',
+          idToken: idTokenParser.parse(result.idToken),
+          accessToken: result.accessToken,
+          refreshToken: result.refreshToken,
+        });
       })
       .catch((err: Error) => {
         setError(err.message || 'ログインに失敗しました');
         console.error('ログインエラー:', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    setLoading(false);
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">ログイン</h2>
-          <p className="mt-2 text-sm text-gray-600">アカウントにサインインしてください</p>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              {error}
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="your-email@example.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                パスワード
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="パスワード"
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? 'ログイン中...' : 'ログイン'}
-            </button>
-          </div>
-
-          <div className="text-center">
-            <Link href="/auth/signup" className="text-indigo-600 hover:text-indigo-500 text-sm">
-              アカウントをお持ちでない方はこちら
-            </Link>
-          </div>
-        </form>
-      </div>
-    </main>
+    <SignInForm
+      email={email}
+      password={password}
+      setEmail={setEmail}
+      setPassword={setPassword}
+      isLoading={loading}
+      error={error}
+      successMessage={successMessage}
+      onSubmit={handleSubmit}
+    />
   );
 }

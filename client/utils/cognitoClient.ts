@@ -5,7 +5,7 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from 'api/@types/auth';
-import { cognitoEndpoint, cognitoUserPoolClientId } from './envValues';
+import { cognitoEndpoint } from './envValues';
 
 type CognitoPayload = {
   ClientId: string;
@@ -15,14 +15,14 @@ type CognitoPayload = {
 // Cognito設定を取得する純粋関数
 const getCognitoConfig = () => ({
   endpoint: cognitoEndpoint,
-  clientId: cognitoUserPoolClientId,
+  clientId: 'fullstack-template-client',
 });
 
 // Cognito APIリクエストを作成する関数
 const createCognitoRequest = (target: string, payload: CognitoPayload) => {
   const config = getCognitoConfig();
 
-  return fetch(config.endpoint, {
+  return fetch(`${config.endpoint}/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-amz-json-1.1',
@@ -73,10 +73,6 @@ export const signUp = async (
         Name: 'email',
         Value: request.email,
       },
-      {
-        Name: 'preferred_username',
-        Value: request.username,
-      },
     ],
   };
 
@@ -103,6 +99,21 @@ export const confirmSignUp = async (
     .then(handleCognitoResponse)
     .then(() => ({
       message: 'メール認証が完了しました。ログインできます。',
+    }));
+};
+
+// 確認コード再送関数
+export const resendConfirmationCode = async (email: string): Promise<{ message: string }> => {
+  const config = getCognitoConfig();
+  const payload: CognitoPayload = {
+    ClientId: config.clientId,
+    Username: email,
+  };
+
+  return createCognitoRequest('AWSCognitoIdentityProviderService.ResendConfirmationCode', payload)
+    .then(handleCognitoResponse)
+    .then(() => ({
+      message: '確認コードを再送信しました。メールをご確認ください。',
     }));
 };
 

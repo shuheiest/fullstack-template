@@ -10,5 +10,3 @@ export const CORS_ORIGIN = z.string().url().parse(process.env.CORS_ORIGIN);
 export const COGNITO_POOL_ID = z.string().parse(process.env.COGNITO_POOL_ID);
 export const COGNITO_CLIENT_ID = z.string().parse(process.env.COGNITO_CLIENT_ID);
 export const COGNITO_POOL_ENDPOINT = z.string().url().parse(process.env.COGNITO_POOL_ENDPOINT);
-export const JWT_SECRET = z.string().min(32).parse(process.env.JWT_SECRET);
-export const JWT_ISSUER = z.string().parse(process.env.JWT_ISSUER);

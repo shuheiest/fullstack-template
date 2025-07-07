@@ -1,11 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { confirmSignUp, signUp } from 'utils/cognitoClient';
+import { confirmSignUp, resendConfirmationCode, signUp } from 'utils/cognitoClient';
 import ConfirmStep from './ConfirmStep';
-import SignUpForm from './SignUpForm';
+import { SignUpForm } from './SignUpForm';
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [step, setStep] = useState<'signup' | 'confirm'>('signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,15 +42,29 @@ export default function SignUpPage() {
     confirmSignUp({ email, confirmationCode })
       .then((result: { message: string }) => {
         console.log('アカウント確認成功:', result.message);
-        // ここで成功時の処理（ログインページへリダイレクトなど）
+        router.push('/auth/signin?message=confirmed');
       })
       .catch((err: Error) => {
         setError(err.message || 'アカウント確認に失敗しました');
         console.error('確認エラー:', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
+    setIsLoading(false);
+  };
+
+  const handleResendCode = () => {
+    setIsLoading(true);
+    setError('');
+
+    resendConfirmationCode(email)
+      .then((result: { message: string }) => {
+        console.log('確認コード再送信成功:', result.message);
+        setError(''); // 成功メッセージは別途表示したい場合
+      })
+      .catch((err: Error) => {
+        setError(err.message || '確認コード再送信に失敗しました');
+        console.error('再送信エラー:', err);
+      });
+    setIsLoading(false);
   };
 
   if (step === 'confirm') {
@@ -61,6 +77,7 @@ export default function SignUpPage() {
         error={error}
         onConfirm={handleConfirmSignUp}
         onBack={() => setStep('signup')}
+        onResend={handleResendCode}
       />
     );
   }
