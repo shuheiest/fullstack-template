@@ -63,7 +63,7 @@ export default function HomePage() {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                DDD アーキテクチャ × TypeScript × Next.js で構築された
+                Frourio × TypeScript × Next.js で構築された
                 <br />
                 エンタープライズレベルの開発プラットフォーム
               </p>
@@ -97,8 +97,8 @@ export default function HomePage() {
                       />
                     </svg>
                   ),
-                  title: 'DDD設計',
-                  description: '保守性の高いドメイン駆動設計',
+                  title: 'Frourio',
+                  description: 'フルスタック型安全フレームワーク',
                 },
                 {
                   icon: (

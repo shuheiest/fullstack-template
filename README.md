@@ -1,10 +1,10 @@
 # Fullstack Template
 
-TypeScript + React を使用した DDD アーキテクチャ採用のフルスタック Web アプリケーション開発用スターターキットです。
+TypeScript + React を使用したモジュラーモノリス構成のフルスタック Web アプリケーション開発用スターターキットです。
 
 ## 特徴
 
-- 🏗️ **DDD (Domain-Driven Design)** アーキテクチャ
+- 🏗️ **モジュラーモノリス** + **DDD設計思想**
 - ⚡ **関数型アプローチ** によるクリーンなコード
 - 🔒 **型安全性** を重視した設計
 - 🚀 **Claude Code** を活用した効率的な開発フロー
@@ -111,7 +111,7 @@ client/                   # Next.js App Router アプリケーション
 ├── types/                # フロントエンド固有型定義
 └── utils/                # フロントエンド用ユーティリティ
 
-server/                   # DDD構成のバックエンド
+server/                   # DDD設計思想によるバックエンド
 ├── api/                  # Frourio API定義
 │   ├── auth/             # 認証API
 │   └── @types/           # 共有型定義

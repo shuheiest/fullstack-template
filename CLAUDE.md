@@ -1,8 +1,8 @@
 # CLAUDE.md
 
 ## プロジェクト概要
-TypeScript + React を使用した DDD アーキテクチャ採用のフルスタック Web アプリケーション開発用 starter kit です。  
-**関数型プログラミング**のアプローチを採用し、Claude Code を活用した効率的な開発を前提としています。
+TypeScript + React を使用したモジュラーモノリス構成のフルスタック Web アプリケーション開発用 starter kit です。  
+**関数型プログラミング**のアプローチと**DDD設計思想**を採用し、Claude Code を活用した効率的な開発を前提としています。
 
 ### 関数型プロジェクトの特徴
 - **イミュータブル（不変性）**: データの変更ではなく新しいオブジェクトを作成
@@ -12,7 +12,7 @@ TypeScript + React を使用した DDD アーキテクチャ採用のフルス�
 - **宣言的プログラミング**: 何をするかに焦点を当てた実装
 
 ## アーキテクチャ
-- **アーキテクチャパターン**: Domain-Driven Design (DDD)
+- **アーキテクチャパターン**: モジュラーモノリス + DDD設計思想
 - **フロントエンド**: Next.js App Router + TypeScript + Tailwind CSS
 - **バックエンド**: Node.js + TypeScript + Frourio + Fastify
 - **データベース**: PostgreSQL (Docker)
@@ -34,7 +34,7 @@ fullstack-template/
 │   ├── utils/                    # フロントエンド用ユーティリティ
 │   └── package.json
 │
-├── server/                       # DDD構成のバックエンド
+├── server/                       # DDD設計思想によるバックエンド
 │   ├── api/                      # Frourio API定義
 │   │   ├── auth/                 # 認証関連API
 │   │   └── @types/               # 共有型定義
