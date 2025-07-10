@@ -2,6 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   output: 'export',
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   trailingSlash: true,
   transpilePackages: ['api'],
   eslint: { ignoreDuringBuilds: true },
