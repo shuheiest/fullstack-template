@@ -4,6 +4,6 @@ export type SignUpFormProps = {
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   isLoading: boolean;
-  error: string;
+  error?: string;
   onSubmit: (e: React.FormEvent) => void;
 };

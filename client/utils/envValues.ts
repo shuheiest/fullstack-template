@@ -2,6 +2,7 @@
 
 const cognitoEndpoint = process.env.NEXT_PUBLIC_COGNITO_ENDPOINT ?? '';
 const awsRegion = process.env.NEXT_PUBLIC_AWS_REGION ?? '';
+const cognitoClientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID ?? '';
 
 Object.entries({
   cognitoEndpoint,
@@ -12,4 +13,4 @@ Object.entries({
   }
 });
 
-export { awsRegion, cognitoEndpoint };
+export { awsRegion, cognitoClientId, cognitoEndpoint };

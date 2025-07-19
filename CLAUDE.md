@@ -212,6 +212,43 @@ claude code "UserApplicationService のテストを作成してください。�
 claude code "User API の統合テストを作成してください。実際のデータベースを使用して、CRUD操作をテストしてください。"
 ```
 
+### コーディング規約
+
+#### React コンポーネント
+- **arrow function + named export** を使用
+- `export const ComponentName = () => {}` 形式で統一
+- default export は使用しない
+- 関数名は PascalCase
+
+```typescript
+// Good example
+export const SignUpForm = () => {
+  return <div>...</div>;
+};
+
+// Bad example
+export default function SignUpForm() {
+  return <div>...</div>;
+}
+```
+
+#### 関数命名
+- イベントハンドラーには `handle` プレフィックスを使用可能
+- ビジネスロジック関数は簡潔な名前を推奨
+- 一貫性を重視
+
+```typescript
+// イベントハンドラー（handle使用可）
+const handleSubmit = () => {};
+const handleChange = () => {};
+const handleClick = () => {};
+
+// ビジネスロジック（簡潔推奨）
+const signUp = () => {};
+const confirmSignUp = () => {};
+const resendCode = () => {};
+```
+
 ### よく使用するコマンド
 
 ```bash

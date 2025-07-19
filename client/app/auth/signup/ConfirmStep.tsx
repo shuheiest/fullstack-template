@@ -1,15 +1,17 @@
+import { ErrorDisplay } from './components/ErrorDisplay';
+
 interface ConfirmStepProps {
   email: string;
   confirmationCode: string;
   setConfirmationCode: (code: string) => void;
   isLoading: boolean;
-  error: string;
+  error?: string;
   onConfirm: (e: React.FormEvent) => void;
   onBack: () => void;
   onResend: () => void;
 }
 
-export default function ConfirmStep({
+export const ConfirmStep = ({
   email,
   confirmationCode,
   setConfirmationCode,
@@ -18,7 +20,7 @@ export default function ConfirmStep({
   onConfirm,
   onBack,
   onResend,
-}: ConfirmStepProps) {
+}: ConfirmStepProps) => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       <div className="w-full max-w-md space-y-8 p-8">
@@ -47,24 +49,7 @@ export default function ConfirmStep({
           </div>
 
           <form className="space-y-6" onSubmit={onConfirm}>
-            {error && (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm text-red-700">{error}</p>
-                  </div>
-                </div>
-              </div>
-            )}
+            <ErrorDisplay error={error} />
 
             <div>
               <label
@@ -188,4 +173,4 @@ export default function ConfirmStep({
       </div>
     </main>
   );
-}
+};

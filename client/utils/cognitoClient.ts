@@ -5,7 +5,7 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from 'api/@types/auth';
-import { cognitoEndpoint } from './envValues';
+import { cognitoClientId, cognitoEndpoint } from './envValues';
 
 type CognitoPayload = {
   ClientId: string;
@@ -15,7 +15,7 @@ type CognitoPayload = {
 // Cognito設定を取得する純粋関数
 const getCognitoConfig = () => ({
   endpoint: cognitoEndpoint,
-  clientId: 'fullstack-template-client',
+  clientId: cognitoClientId,
 });
 
 // Cognito APIリクエストを作成する関数

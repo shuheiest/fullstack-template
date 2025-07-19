@@ -12,11 +12,11 @@ import { signIn } from 'utils/cognitoClient';
 import { idTokenParser } from 'utils/parser';
 import { SignInForm } from './SignInForm';
 
-export default function SignInPage() {
+const SignInPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState<string>();
+  const [successMessage, setSuccessMessage] = useState<string>();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,7 +53,6 @@ export default function SignInPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     signIn({ email, password })
       .then((result: AuthToken) => {
@@ -68,8 +67,10 @@ export default function SignInPage() {
       .catch((err: Error) => {
         setError(err.message || 'ログインに失敗しました');
         console.error('ログインエラー:', err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   };
 
   return (
@@ -84,4 +85,6 @@ export default function SignInPage() {
       onSubmit={handleSubmit}
     />
   );
-}
+};
+
+export default SignInPage;

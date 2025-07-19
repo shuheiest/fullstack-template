@@ -4,8 +4,6 @@ type MessageDisplayProps = {
 };
 
 export const MessageDisplay = ({ successMessage, error }: MessageDisplayProps) => {
-  if (successMessage === undefined && error === undefined) return null;
-
   return (
     <>
       {successMessage !== undefined && (

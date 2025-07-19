@@ -3,17 +3,17 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { confirmSignUp, resendConfirmationCode, signUp } from 'utils/cognitoClient';
-import ConfirmStep from './ConfirmStep';
+import { ConfirmStep } from './ConfirmStep';
 import { SignUpForm } from './SignUpForm';
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   const router = useRouter();
   const [step, setStep] = useState<'signup' | 'confirm'>('signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmationCode, setConfirmationCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>();
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,13 +40,11 @@ export default function SignUpPage() {
     setError('');
 
     confirmSignUp({ email, confirmationCode })
-      .then((result: { message: string }) => {
-        console.log('アカウント確認成功:', result.message);
+      .then(() => {
         router.push('/auth/signin?message=confirmed');
       })
       .catch((err: Error) => {
         setError(err.message || 'アカウント確認に失敗しました');
-        console.error('確認エラー:', err);
       });
     setIsLoading(false);
   };
@@ -56,19 +54,28 @@ export default function SignUpPage() {
     setError('');
 
     resendConfirmationCode(email)
-      .then((result: { message: string }) => {
-        console.log('確認コード再送信成功:', result.message);
-        setError(''); // 成功メッセージは別途表示したい場合
+      .then(() => {
+        setError('');
       })
       .catch((err: Error) => {
         setError(err.message || '確認コード再送信に失敗しました');
-        console.error('再送信エラー:', err);
       });
     setIsLoading(false);
   };
 
-  if (step === 'confirm') {
-    return (
+  const stepComponents = {
+    signup: (
+      <SignUpForm
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        isLoading={isLoading}
+        error={error}
+        onSubmit={handleSignUp}
+      />
+    ),
+    confirm: (
       <ConfirmStep
         email={email}
         confirmationCode={confirmationCode}
@@ -79,18 +86,10 @@ export default function SignUpPage() {
         onBack={() => setStep('signup')}
         onResend={handleResendCode}
       />
-    );
-  }
+    ),
+  };
 
-  return (
-    <SignUpForm
-      email={email}
-      password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      isLoading={isLoading}
-      error={error}
-      onSubmit={handleSignUp}
-    />
-  );
-}
+  return stepComponents[step];
+};
+
+export default SignUpPage;

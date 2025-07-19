@@ -9,8 +9,8 @@ type SignInFormProps = {
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   isLoading: boolean;
-  error: string;
-  successMessage: string;
+  error?: string;
+  successMessage?: string;
   onSubmit: (e: React.FormEvent) => void;
 };
 
