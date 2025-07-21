@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { confirmSignUp, resendConfirmationCode, signUp } from 'utils/cognitoClient';
+import { amplifyConfirmSignUp, amplifySignUp, resendConfirmationCode } from 'utils/cognitoClient';
 import { ConfirmStep } from './ConfirmStep';
 import { SignUpForm } from './SignUpForm';
 
@@ -20,7 +20,7 @@ const SignUpPage = () => {
     setIsLoading(true);
     setError('');
 
-    signUp({ email, password, username: email })
+    amplifySignUp({ email, password, username: email })
       .then((result: { userSub?: string; message: string }) => {
         setStep('confirm');
         console.log('サインアップ成功:', result.message);
@@ -39,7 +39,7 @@ const SignUpPage = () => {
     setIsLoading(true);
     setError('');
 
-    confirmSignUp({ email, confirmationCode })
+    amplifyConfirmSignUp({ email, confirmationCode })
       .then(() => {
         router.push('/auth/signin?message=confirmed');
       })

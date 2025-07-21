@@ -8,7 +8,7 @@ import { useAuthState } from 'store/useAuthState';
 import { useLoadingState } from 'store/useLoadingState';
 import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
 import { apiClient } from 'utils/apiClient';
-import { signIn } from 'utils/cognitoClient';
+import { amplifySignIn } from 'utils/cognitoClient';
 import { idTokenParser } from 'utils/parser';
 import { SignInForm } from './SignInForm';
 
@@ -54,9 +54,17 @@ const SignInPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    signIn({ email, password })
-      .then((result: AuthToken) => {
+    amplifySignIn({ email, password })
+      .then((result: AuthToken & { isEmailVerified: boolean }) => {
         console.log('ログイン成功:', result);
+
+        // メール未認証の場合は確認画面にリダイレクト
+        if (!result.isEmailVerified) {
+          setError('メール認証が完了していません。確認コードを入力してください。');
+          router.push(`/auth/confirm?email=${encodeURIComponent(email)}`);
+          return;
+        }
+
         setAuthTokens({
           provider: 'cognito',
           idToken: idTokenParser.parse(result.idToken),
@@ -66,7 +74,6 @@ const SignInPage = () => {
       })
       .catch((err: Error) => {
         setError(err.message || 'ログインに失敗しました');
-        console.error('ログインエラー:', err);
       })
       .finally(() => {
         setLoading(false);

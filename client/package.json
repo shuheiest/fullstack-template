@@ -25,6 +25,7 @@
     "@types/react-dom": "^18.2.17",
     "aspida": "^1.14.0",
     "aspida-mock": "^0.11.1",
+    "aws-amplify": "^6.15.3",
     "axios": "^1.6.2",
     "dotenv": "^16.5.0",
     "next": "14.0.3",
