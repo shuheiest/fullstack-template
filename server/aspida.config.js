@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log(process.env.API_ORIGIN);
 module.exports = {
   input: 'api',
   outputMode: 'aliasOnly',
