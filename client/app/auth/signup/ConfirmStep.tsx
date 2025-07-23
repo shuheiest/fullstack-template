@@ -1,3 +1,4 @@
+import { messages } from 'utils/messages';
 import { ErrorDisplay } from './components/ErrorDisplay';
 
 interface ConfirmStepProps {
@@ -118,10 +119,10 @@ export const ConfirmStep = ({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  確認中...
+                  {messages.common.loading}
                 </>
               ) : (
-                'アカウントを確認'
+                messages.common.confirm
               )}
             </button>
 
@@ -149,7 +150,7 @@ export const ConfirmStep = ({
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                   />
                 </svg>
-                確認コードを再送信
+                {messages.auth.resendCode}
               </button>
 
               <button
@@ -165,7 +166,7 @@ export const ConfirmStep = ({
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                戻る
+                {messages.common.back}
               </button>
             </div>
           </form>

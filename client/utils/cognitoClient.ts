@@ -4,7 +4,7 @@ import type {
   ConfirmSignUpRequest,
   SignInRequest,
   SignUpRequest,
-} from 'api/@types/auth';
+} from 'types/auth';
 import { Amplify } from 'aws-amplify';
 import {
   confirmSignUp,

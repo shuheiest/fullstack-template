@@ -1,6 +1,3 @@
-// 認証関連の共通型定義（クライアント・サーバー共通）
-import type { UserId } from './brandedId';
-
 export type SignUpRequest = {
   email: string;
   password: string;
@@ -23,9 +20,4 @@ export type AuthToken = {
   idToken: string;
   refreshToken: string;
   expiresIn: number;
-};
-
-export type SignUpResponse = {
-  userSub?: UserId;
-  message: string;
 };

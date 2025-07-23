@@ -1,6 +1,6 @@
 'use client';
 
-import type { AuthToken } from 'api/@types/auth';
+import type { AuthToken } from 'types/auth';
 import { useAuthHeader } from 'hooks/useAuthHeader';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import { useLoadingState } from 'store/useLoadingState';
 import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
 import { apiClient } from 'utils/apiClient';
 import { amplifySignIn } from 'utils/cognitoClient';
+import { messages } from 'utils/messages';
 import { idTokenParser } from 'utils/parser';
 import { SignInForm } from './SignInForm';
 
@@ -25,15 +26,13 @@ const SignInPage = () => {
   const { setUserOrAnonymous } = useUserOrAnonymousState();
   const { loading, setLoading } = useLoadingState();
 
-  // URLパラメータから成功メッセージを取得
   useEffect(() => {
     const message = searchParams.get('message');
     if (message === 'confirmed') {
-      setSuccessMessage('アカウント確認が完了しました。ログインしてください。');
+      setSuccessMessage(messages.auth.accountConfirmed);
     }
   }, [searchParams]);
 
-  // ユーザー同期処理
   useEffect(() => {
     if (!headers || !authInited) return;
     setLoading(true);
@@ -56,11 +55,8 @@ const SignInPage = () => {
 
     amplifySignIn({ email, password })
       .then((result: AuthToken & { isEmailVerified: boolean }) => {
-        console.log('ログイン成功:', result);
-
-        // メール未認証の場合は確認画面にリダイレクト
         if (!result.isEmailVerified) {
-          setError('メール認証が完了していません。確認コードを入力してください。');
+          setError(messages.auth.emailNotVerified);
           router.push(`/auth/confirm?email=${encodeURIComponent(email)}`);
           return;
         }
@@ -73,7 +69,7 @@ const SignInPage = () => {
         });
       })
       .catch((err: Error) => {
-        setError(err.message || 'ログインに失敗しました');
+        setError(err.message || messages.auth.loginFailed);
       })
       .finally(() => {
         setLoading(false);

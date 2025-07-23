@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { amplifyConfirmSignUp, amplifySignUp, resendConfirmationCode } from 'utils/cognitoClient';
+import { messages } from 'utils/messages';
 import { ConfirmStep } from './ConfirmStep';
 import { SignUpForm } from './SignUpForm';
 
@@ -26,7 +27,7 @@ const SignUpPage = () => {
         console.log('サインアップ成功:', result.message);
       })
       .catch((err: Error) => {
-        setError(err.message || 'サインアップに失敗しました');
+        setError(err.message || messages.auth.signupFailed);
         console.error('サインアップエラー:', err);
       })
       .finally(() => {
@@ -44,7 +45,7 @@ const SignUpPage = () => {
         router.push('/auth/signin?message=confirmed');
       })
       .catch((err: Error) => {
-        setError(err.message || 'アカウント確認に失敗しました');
+        setError(err.message || messages.auth.confirmFailed);
       });
     setIsLoading(false);
   };
@@ -58,7 +59,7 @@ const SignUpPage = () => {
         setError('');
       })
       .catch((err: Error) => {
-        setError(err.message || '確認コード再送信に失敗しました');
+        setError(err.message || messages.auth.resendFailed);
       });
     setIsLoading(false);
   };
