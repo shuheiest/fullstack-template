@@ -9,8 +9,10 @@ import { Amplify } from 'aws-amplify';
 import {
   confirmSignUp,
   fetchUserAttributes,
+  getCurrentUser,
   resendSignUpCode,
   signIn,
+  signOut,
   signUp,
 } from 'aws-amplify/auth';
 import { cognitoClientId, cognitoEndpoint, cognitoPoolId } from './envValues';
@@ -113,4 +115,16 @@ export const clearTokens = () => {
 export const isTokenValid = (token: AuthToken): boolean => {
   const now = Math.floor(Date.now() / 1000);
   return now < token.expiresIn;
+};
+
+// 現在のログイン状態をチェックする関数
+export const getCurrentAuthUser = () => {
+  return getCurrentUser().then(user => user).catch(() => null);
+};
+
+// ログアウト関数
+export const amplifySignOut = () => {
+  return signOut().then(() => {
+    clearTokens();
+  });
 };

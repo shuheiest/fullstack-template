@@ -8,7 +8,7 @@ import { useAuthState } from 'store/useAuthState';
 import { useLoadingState } from 'store/useLoadingState';
 import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
 import { apiClient } from 'utils/apiClient';
-import { amplifySignIn } from 'utils/cognitoClient';
+import { amplifySignIn, getCurrentAuthUser } from 'utils/cognitoClient';
 import { messages } from 'utils/messages';
 import { idTokenParser } from 'utils/parser';
 import { SignInForm } from './SignInForm';
@@ -32,6 +32,16 @@ const SignInPage = () => {
       setSuccessMessage(messages.auth.accountConfirmed);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    getCurrentAuthUser().then(user => {
+      if (user) {
+        router.push('/dashboard');
+      }
+    }).catch(() => {
+      // ログインしていない場合は何もしない
+    });
+  }, [router]);
 
   useEffect(() => {
     if (!headers || !authInited) return;
