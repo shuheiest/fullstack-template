@@ -1,10 +1,4 @@
 // フロントエンド用Cognitoクライアント（関数型）
-import type {
-  AuthToken,
-  ConfirmSignUpRequest,
-  SignInRequest,
-  SignUpRequest,
-} from 'types/auth';
 import { Amplify } from 'aws-amplify';
 import {
   confirmSignUp,
@@ -15,6 +9,7 @@ import {
   signOut,
   signUp,
 } from 'aws-amplify/auth';
+import type { AuthToken, ConfirmSignUpRequest, SignInRequest, SignUpRequest } from 'types/auth';
 import { cognitoClientId, cognitoEndpoint, cognitoPoolId } from './envValues';
 
 // Amplify設定
@@ -118,13 +113,16 @@ export const isTokenValid = (token: AuthToken): boolean => {
 };
 
 // 現在のログイン状態をチェックする関数
-export const getCurrentAuthUser = () => {
-  return getCurrentUser().then(user => user).catch(() => null);
+export const getCurrentAuthUser = async () => {
+  const user = await getCurrentUser();
+
+  if (user === null) return;
+
+  return user;
 };
 
 // ログアウト関数
-export const amplifySignOut = () => {
-  return signOut().then(() => {
-    clearTokens();
-  });
+export const amplifySignOut = async () => {
+  await signOut();
+  clearTokens();
 };

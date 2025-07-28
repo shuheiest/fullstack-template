@@ -2,14 +2,16 @@ import Link from 'next/link';
 
 type SignInButtonProps = {
   isLoading: boolean;
+  onClick: () => void;
 };
 
-export const SignInButton = ({ isLoading }: SignInButtonProps) => {
+export const SignInButton = ({ isLoading, onClick }: SignInButtonProps) => {
   return (
     <>
       <button
         type="submit"
         disabled={isLoading}
+        onClick={onClick}
         className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-white font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 transform hover:scale-[1.02]"
       >
         {isLoading ? (

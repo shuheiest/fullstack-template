@@ -1,12 +1,11 @@
 'use client';
 
-import type { AuthToken } from 'types/auth';
 import { useAuthHeader } from 'hooks/useAuthHeader';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'store/useAuthState';
-import { useLoadingState } from 'store/useLoadingState';
 import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
+import type { AuthToken } from 'types/auth';
 import { apiClient } from 'utils/apiClient';
 import { amplifySignIn, getCurrentAuthUser } from 'utils/cognitoClient';
 import { messages } from 'utils/messages';
@@ -18,13 +17,13 @@ const SignInPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const { headers } = useAuthHeader();
-  const { setAuthTokens, authInited } = useAuthState();
+  const { auth, setAuthTokens, authInited } = useAuthState();
   const { setUserOrAnonymous } = useUserOrAnonymousState();
-  const { loading, setLoading } = useLoadingState();
 
   useEffect(() => {
     const message = searchParams.get('message');
@@ -34,13 +33,16 @@ const SignInPage = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    getCurrentAuthUser().then(user => {
-      if (user) {
-        router.push('/dashboard');
-      }
-    }).catch(() => {
-      // ログインしていない場合は何もしない
-    });
+    getCurrentAuthUser()
+      .then((user) => {
+        if (user) {
+          console.log('既にログイン済み - ダッシュボードに遷移');
+          router.push('/dashboard');
+        }
+      })
+      .catch(() => {
+        console.log('未ログイン状態');
+      });
   }, [router]);
 
   useEffect(() => {
@@ -55,16 +57,27 @@ const SignInPage = () => {
       })
       .catch((err) => {
         console.error('ユーザー同期エラー:', err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   }, [headers, authInited, setUserOrAnonymous, router, setLoading]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // 認証状態が変わったときのダッシュボード遷移
+  useEffect(() => {
+    if (auth.isAuthorized && auth.tokens) {
+      console.log('認証成功 - ダッシュボードに遷移');
+      router.push('/dashboard');
+    }
+  }, [auth.isAuthorized, auth.tokens, router]);
+
+  const handleLogin = () => {
+    console.log('ログイン開始 - loading状態をtrueに設定');
     setLoading(true);
 
     amplifySignIn({ email, password })
       .then((result: AuthToken & { isEmailVerified: boolean }) => {
+        console.log('ログイン成功');
         if (!result.isEmailVerified) {
           setError(messages.auth.emailNotVerified);
           router.push(`/auth/confirm?email=${encodeURIComponent(email)}`);
@@ -79,6 +92,7 @@ const SignInPage = () => {
         });
       })
       .catch((err: Error) => {
+        console.error('ログインエラー:', err);
         setError(err.message || messages.auth.loginFailed);
       })
       .finally(() => {
@@ -95,7 +109,7 @@ const SignInPage = () => {
       isLoading={loading}
       error={error}
       successMessage={successMessage}
-      onSubmit={handleSubmit}
+      onLogin={handleLogin}
     />
   );
 };

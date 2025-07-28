@@ -11,7 +11,7 @@ type SignInFormProps = {
   isLoading: boolean;
   error?: string;
   successMessage?: string;
-  onSubmit: (e: React.FormEvent) => void;
+  onLogin: () => void;
 };
 
 export const SignInForm = ({
@@ -22,14 +22,14 @@ export const SignInForm = ({
   isLoading,
   error,
   successMessage,
-  onSubmit,
+  onLogin,
 }: SignInFormProps) => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       <div className="w-full max-w-md space-y-8 p-8">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <SignInHeader />
-          <form className="space-y-6" onSubmit={onSubmit}>
+          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); onLogin(); }}>
             <MessageDisplay successMessage={successMessage} error={error} />
             <SignInFormFields
               email={email}
@@ -37,7 +37,7 @@ export const SignInForm = ({
               setEmail={setEmail}
               setPassword={setPassword}
             />
-            <SignInButton isLoading={isLoading} />
+            <SignInButton isLoading={isLoading} onClick={onLogin} />
           </form>
         </div>
       </div>
