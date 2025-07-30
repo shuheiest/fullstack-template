@@ -2,14 +2,22 @@
 
 export const Sidebar = () => {
   return (
-    <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen">
+    <aside className="w-60 bg-gray-900 min-h-screen">
       <div className="p-4">
-        <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">メニュー</h2>
         <nav className="space-y-1">
           <a
             href="/dashboard"
-            className="block px-3 py-2 rounded-md text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200"
+            className="flex items-center px-3 py-2 rounded text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
           >
+            <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 1v6m8-6v6" />
+            </svg>
             ダッシュボード
           </a>
         </nav>

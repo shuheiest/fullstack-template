@@ -15,33 +15,44 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-slate-400 to-slate-600 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-              </div>
+              <svg width="40" height="40" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
+                  </linearGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <rect width="32" height="32" rx="8" fill="url(#modernGrad)" />
+                <path
+                  d="M19 6 L12 15 L16 15 L13 26 L20 17 L16 17 L19 6 Z"
+                  fill="white"
+                  stroke="none"
+                  filter="url(#glow)"
+                />
+                <circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.3)" />
+                <circle cx="24" cy="24" r="1.5" fill="rgba(255,255,255,0.3)" />
+                <circle cx="24" cy="8" r="1" fill="rgba(255,255,255,0.4)" />
+                <circle cx="8" cy="24" r="1" fill="rgba(255,255,255,0.4)" />
+              </svg>
               <span className="text-xl font-semibold text-white">FullStack</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <Link
                 href="/auth/signin"
-                className="text-gray-300 hover:text-white transition-colors font-medium"
+                className="bg-gray-700 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded transition-colors"
               >
                 ログイン
               </Link>
               <Link
                 href="/auth/signup"
-                className="bg-gradient-to-r from-slate-600 to-slate-800 text-white px-4 py-2 rounded-lg hover:from-slate-700 hover:to-slate-900 transition-all duration-200 font-medium"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded font-medium transition-colors"
               >
                 無料で始める
               </Link>
@@ -124,22 +135,6 @@ export default function HomePage() {
                   <p className="text-gray-400">{feature.description}</p>
                 </div>
               ))}
-            </div>
-
-            {/* CTA ボタン */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-              <Link
-                href="/auth/signup"
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-200 transform hover:scale-105 shadow-xl"
-              >
-                今すぐ始める
-              </Link>
-              <Link
-                href="/auth/signin"
-                className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-200 border border-white/20"
-              >
-                ログイン
-              </Link>
             </div>
           </div>
         </div>

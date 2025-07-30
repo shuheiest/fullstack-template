@@ -1,0 +1,30 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background with subtle gradient -->
+  <rect width="32" height="32" rx="8" fill="url(#modernGrad)" />
+  
+  <!-- Lightning bolt for speed -->
+  <path d="M19 6 L12 15 L16 15 L13 26 L20 17 L16 17 L19 6 Z" 
+        fill="white" 
+        stroke="none"
+        filter="url(#glow)" />
+  
+  <!-- Subtle accent dots -->
+  <circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.3)" />
+  <circle cx="24" cy="24" r="1.5" fill="rgba(255,255,255,0.3)" />
+  <circle cx="24" cy="8" r="1" fill="rgba(255,255,255,0.4)" />
+  <circle cx="8" cy="24" r="1" fill="rgba(255,255,255,0.4)" />
+</svg>

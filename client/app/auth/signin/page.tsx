@@ -36,13 +36,10 @@ const SignInPage = () => {
     getCurrentAuthUser()
       .then((user) => {
         if (user) {
-          console.log('既にログイン済み - ダッシュボードに遷移');
           router.push('/dashboard');
         }
       })
-      .catch(() => {
-        console.log('未ログイン状態');
-      });
+      .catch(() => {});
   }, [router]);
 
   useEffect(() => {
@@ -66,18 +63,15 @@ const SignInPage = () => {
   // 認証状態が変わったときのダッシュボード遷移
   useEffect(() => {
     if (auth.isAuthorized && auth.tokens) {
-      console.log('認証成功 - ダッシュボードに遷移');
       router.push('/dashboard');
     }
   }, [auth.isAuthorized, auth.tokens, router]);
 
   const handleLogin = () => {
-    console.log('ログイン開始 - loading状態をtrueに設定');
     setLoading(true);
 
     amplifySignIn({ email, password })
       .then((result: AuthToken & { isEmailVerified: boolean }) => {
-        console.log('ログイン成功');
         if (!result.isEmailVerified) {
           setError(messages.auth.emailNotVerified);
           router.push(`/auth/confirm?email=${encodeURIComponent(email)}`);

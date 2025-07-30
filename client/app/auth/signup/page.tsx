@@ -14,7 +14,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const [confirmationCode, setConfirmationCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string>('');
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +22,8 @@ const SignUpPage = () => {
     setError('');
 
     amplifySignUp({ email, password, username: email })
-      .then((result: { userSub?: string; message: string }) => {
+      .then(() => {
         setStep('confirm');
-        console.log('サインアップ成功:', result.message);
       })
       .catch((err: Error) => {
         setError(err.message || messages.auth.signupFailed);
