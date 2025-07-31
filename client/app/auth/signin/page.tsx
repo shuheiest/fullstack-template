@@ -86,7 +86,6 @@ const SignInPage = () => {
         });
       })
       .catch((err: Error) => {
-        console.error('ログインエラー:', err);
         setError(err.message || messages.auth.loginFailed);
       })
       .finally(() => {
