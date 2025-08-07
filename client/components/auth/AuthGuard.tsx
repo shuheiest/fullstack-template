@@ -1,30 +1,17 @@
 'use client';
 
-import { getCurrentUser } from '@aws-amplify/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useAuthState } from 'store/useAuthState';
 
 interface AuthGuardProps {
   children: React.ReactNode;
 }
 
 export const AuthGuard = ({ children }: AuthGuardProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const { auth, authInited } = useAuthState();
   const router = useRouter();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      getCurrentUser()
-        .then(() => setIsAuthenticated(true))
-        .catch(() => {
-          setIsAuthenticated(false);
-        });
-    };
-
-    void checkAuth();
-  }, [router]);
-
-  if (isAuthenticated === null) {
+  if (!authInited) {
     return (
       <div className="min-h-screen bg-gray-700 flex items-center justify-center">
         <div className="text-center">
@@ -35,7 +22,7 @@ export const AuthGuard = ({ children }: AuthGuardProps) => {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!auth.isAuthorized) {
     return (
       <div className="min-h-screen bg-gray-700 flex items-center justify-center">
         <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-600 p-8 text-center max-w-md">

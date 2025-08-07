@@ -1,49 +1,54 @@
+import type { AuthSession } from 'aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { useEffect, useState } from 'react';
-import type { IdToken } from 'types/brandedId';
-
-export type AuthTokens = {
-  provider: 'cognito';
-  idToken: IdToken;
-  accessToken: string;
-  refreshToken: string;
-};
 
 export type AuthState = {
   isAuthorized: boolean;
-  tokens: AuthTokens | null;
+  session: AuthSession | null;
 };
 
 export const useAuthState = () => {
   const [auth, setAuth] = useState<AuthState>({
     isAuthorized: false,
-    tokens: null,
+    session: null,
   });
   const [authInited, setAuthInited] = useState(false);
 
   useEffect(() => {
-    // ここで実際のCognito認証状態を確認する処理を実装
-    // 今は仮実装
-    setAuthInited(true);
+    const initializeAuth = async () => {
+      const session = await fetchAuthSession();
+
+      if (!session?.tokens?.accessToken || !session?.tokens?.idToken) {
+        setAuth({ isAuthorized: false, session: null });
+        setAuthInited(true);
+        return;
+      }
+
+      setAuth({ isAuthorized: true, session });
+      setAuthInited(true);
+    };
+
+    void initializeAuth();
   }, []);
 
-  const setAuthTokens = (tokens: AuthTokens) => {
+  const setAuthSession = (session: AuthSession) => {
     setAuth({
       isAuthorized: true,
-      tokens,
+      session,
     });
   };
 
   const clearAuth = () => {
     setAuth({
       isAuthorized: false,
-      tokens: null,
+      session: null,
     });
   };
 
   return {
     auth,
     authInited,
-    setAuthTokens,
+    setAuthSession,
     clearAuth,
   };
 };

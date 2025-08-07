@@ -26,5 +26,5 @@ export const messages = {
     back: '戻る',
     next: '次へ',
     submit: '送信',
-  }
+  },
 } as const;

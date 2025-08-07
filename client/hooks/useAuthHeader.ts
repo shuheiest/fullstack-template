@@ -7,8 +7,8 @@ export const useAuthHeader = () => {
 
   const headers = useMemo(
     () =>
-      auth.isAuthorized && auth.tokens && auth.tokens.provider === 'cognito'
-        ? genAuthHeader(auth.tokens.idToken)
+      auth.isAuthorized && auth.session?.tokens?.idToken
+        ? genAuthHeader(auth.session.tokens.idToken)
         : null,
     [auth],
   );

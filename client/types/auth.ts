@@ -1,3 +1,5 @@
+import type { JWT } from 'aws-amplify/auth';
+
 export type SignUpRequest = {
   email: string;
   password: string;
@@ -16,8 +18,8 @@ export type ConfirmSignUpRequest = {
 
 export type AuthToken = {
   provider: 'cognito';
-  accessToken: string;
-  idToken: string;
-  refreshToken: string;
-  expiresIn: number;
+  accessToken: JWT;
+  idToken: JWT;
+  refreshToken?: JWT;
+  expiresAt: number;
 };

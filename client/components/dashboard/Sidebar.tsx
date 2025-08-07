@@ -12,7 +12,7 @@ type SidebarProps = {
 };
 
 export const Sidebar = ({ activeItem, onItemSelect }: SidebarProps) => {
-  const menuItems: MenuItem[] = [{ id: 'forecast', label: '収益予測', icon: '📊' }];
+  const menuItems: MenuItem[] = [];
 
   return (
     <aside className="w-64 bg-gray-900 text-white min-h-screen">

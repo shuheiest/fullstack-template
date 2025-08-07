@@ -1,15 +1,14 @@
 'use client';
 
+import type { AuthSession } from 'aws-amplify/auth';
 import { useAuthHeader } from 'hooks/useAuthHeader';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'store/useAuthState';
 import { useUserOrAnonymousState } from 'store/useUserOrAnonymousState';
-import type { AuthToken } from 'types/auth';
 import { apiClient } from 'utils/apiClient';
 import { amplifySignIn, getCurrentAuthUser } from 'utils/cognitoClient';
 import { messages } from 'utils/messages';
-import { idTokenParser } from 'utils/parser';
 import { SignInForm } from './SignInForm';
 
 const SignInPage = () => {
@@ -22,7 +21,7 @@ const SignInPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { headers } = useAuthHeader();
-  const { auth, setAuthTokens, authInited } = useAuthState();
+  const { auth, setAuthSession, authInited } = useAuthState();
   const { setUserOrAnonymous } = useUserOrAnonymousState();
 
   useEffect(() => {
@@ -62,28 +61,23 @@ const SignInPage = () => {
 
   // 認証状態が変わったときのダッシュボード遷移
   useEffect(() => {
-    if (auth.isAuthorized && auth.tokens) {
+    if (auth.isAuthorized && auth.session) {
       router.push('/dashboard');
     }
-  }, [auth.isAuthorized, auth.tokens, router]);
+  }, [auth.isAuthorized, auth.session, router]);
 
   const handleLogin = () => {
     setLoading(true);
 
     amplifySignIn({ email, password })
-      .then((result: AuthToken & { isEmailVerified: boolean }) => {
+      .then((result: AuthSession & { isEmailVerified: boolean }) => {
         if (!result.isEmailVerified) {
           setError(messages.auth.emailNotVerified);
           router.push(`/auth/confirm?email=${encodeURIComponent(email)}`);
           return;
         }
 
-        setAuthTokens({
-          provider: 'cognito',
-          idToken: idTokenParser.parse(result.idToken),
-          accessToken: result.accessToken,
-          refreshToken: result.refreshToken,
-        });
+        setAuthSession(result);
       })
       .catch((err: Error) => {
         setError(err.message || messages.auth.loginFailed);

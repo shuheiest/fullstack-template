@@ -1,7 +1,9 @@
 // フロントエンド用Cognitoクライアント（関数型）
 import { Amplify } from 'aws-amplify';
+import type { AuthSession } from 'aws-amplify/auth';
 import {
   confirmSignUp,
+  fetchAuthSession,
   fetchUserAttributes,
   getCurrentUser,
   resendSignUpCode,
@@ -9,7 +11,7 @@ import {
   signOut,
   signUp,
 } from 'aws-amplify/auth';
-import type { AuthToken, ConfirmSignUpRequest, SignInRequest, SignUpRequest } from 'types/auth';
+import type { ConfirmSignUpRequest, SignInRequest, SignUpRequest } from 'types/auth';
 import { cognitoClientId, cognitoEndpoint, cognitoPoolId } from './envValues';
 
 // Amplify設定
@@ -66,7 +68,7 @@ export const resendConfirmationCode = async (email: string): Promise<{ message: 
 // サインイン関数（SRP認証自動使用）
 export const amplifySignIn = async (
   request: SignInRequest,
-): Promise<AuthToken & { isEmailVerified: boolean }> => {
+): Promise<AuthSession & { isEmailVerified: boolean }> => {
   return signIn({
     username: request.email,
     password: request.password,
@@ -79,37 +81,43 @@ export const amplifySignIn = async (
     const userAttributes = await fetchUserAttributes();
     const isEmailVerified = userAttributes.email_verified === 'true';
 
+    // 認証セッションを取得
+    const session = await fetchAuthSession();
+
+    if (!session.tokens?.accessToken || !session.tokens?.idToken) {
+      throw new Error('認証トークンの取得に失敗しました。');
+    }
+
     return {
-      provider: 'cognito' as const,
-      accessToken: '', // TODO: 実際のトークン取得方法を調整
-      idToken: '', // TODO: 実際のトークン取得方法を調整
-      refreshToken: '', // TODO: 実際のトークン取得方法を調整
-      expiresIn: 3600, // 1時間（デフォルト）
+      ...session,
       isEmailVerified,
     };
   });
 };
 
-// トークンをローカルストレージに保存する関数
-export const saveTokens = (tokens: AuthToken) => {
-  localStorage.setItem('authTokens', JSON.stringify(tokens));
+// セッションをローカルストレージに保存する関数
+export const saveAuthSession = (session: AuthSession) => {
+  localStorage.setItem('authSession', JSON.stringify(session));
 };
 
-// トークンをローカルストレージから取得する関数
-export const getTokens = (): AuthToken | null => {
-  const stored = localStorage.getItem('authTokens');
+// セッションをローカルストレージから取得する関数
+export const getAuthSession = (): AuthSession | null => {
+  const stored = localStorage.getItem('authSession');
   return stored !== null ? JSON.parse(stored) : null;
 };
 
-// トークンをローカルストレージから削除する関数
-export const clearTokens = () => {
-  localStorage.removeItem('authTokens');
+// セッションをローカルストレージから削除する関数
+export const clearAuthSession = () => {
+  localStorage.removeItem('authSession');
 };
 
-// トークンの有効性をチェックする関数
-export const isTokenValid = (token: AuthToken): boolean => {
+// セッションの有効性をチェックする関数
+export const isSessionValid = (session: AuthSession): boolean => {
+  const exp = session.tokens?.accessToken?.payload?.exp;
+  if (exp === undefined) return false;
+
   const now = Math.floor(Date.now() / 1000);
-  return now < token.expiresIn;
+  return now < exp;
 };
 
 // 現在のログイン状態をチェックする関数
@@ -124,5 +132,5 @@ export const getCurrentAuthUser = async () => {
 // ログアウト関数
 export const amplifySignOut = async () => {
   await signOut();
-  clearTokens();
+  clearAuthSession();
 };

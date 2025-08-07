@@ -1,8 +1,8 @@
 'use client';
 
+import { AuthGuard } from '../../components/auth/AuthGuard';
 import { Header } from '../../components/layout/Header';
 import { Sidebar } from '../../components/layout/Sidebar';
-import { AuthGuard } from '../../components/auth/AuthGuard';
 
 export const Dashboard = () => {
   return (

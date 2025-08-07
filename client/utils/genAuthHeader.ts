@@ -1,5 +1,5 @@
-import type { IdToken } from 'types/brandedId';
+import type { JWT } from 'aws-amplify/auth';
 
-export const genAuthHeader = (idToken: IdToken) => ({
+export const genAuthHeader = (idToken: JWT) => ({
   authorization: `Bearer ${idToken}`,
 });

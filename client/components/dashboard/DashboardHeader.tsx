@@ -7,11 +7,13 @@ export const DashboardHeader = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    amplifySignOut().then(() => {
-      router.push('/');
-    }).catch(() => {
-      router.push('/');
-    });
+    amplifySignOut()
+      .then(() => {
+        router.push('/');
+      })
+      .catch(() => {
+        router.push('/');
+      });
   };
 
   return (
