@@ -16,7 +16,7 @@ export const Header = () => {
       <div className="px-6">
         <div className="flex justify-between items-center h-14">
           <div className="flex items-center space-x-3">
-            <h1 className="text-lg font-semibold text-white">ダッシュボード</h1>
+            <h1 className="text-lg font-semibold text-white">Fullstack Template</h1>
           </div>
           <div className="flex items-center">
             <button

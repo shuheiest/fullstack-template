@@ -11,37 +11,39 @@ export default function HomePage() {
       </div>
 
       {/* ヘッダー */}
-      <header className="relative z-10 pt-8 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="relative z-10 pt-12">
+        <div className="w-full px-4 sm:px-4 lg:px-12">
           <nav className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <svg width="40" height="40" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
-                  </linearGradient>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                    <feMerge>
-                      <feMergeNode in="coloredBlur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                <rect width="32" height="32" rx="8" fill="url(#modernGrad)" />
-                <path
-                  d="M19 6 L12 15 L16 15 L13 26 L20 17 L16 17 L19 6 Z"
-                  fill="white"
-                  stroke="none"
-                  filter="url(#glow)"
-                />
-                <circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.3)" />
-                <circle cx="24" cy="24" r="1.5" fill="rgba(255,255,255,0.3)" />
-                <circle cx="24" cy="8" r="1" fill="rgba(255,255,255,0.4)" />
-                <circle cx="8" cy="24" r="1" fill="rgba(255,255,255,0.4)" />
-              </svg>
-              <span className="text-xl font-semibold text-white">FullStack</span>
+              <Link href="/" className="flex items-center space-x-3">
+                <svg width="40" height="40" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
+                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <rect width="32" height="32" rx="8" fill="url(#modernGrad)" />
+                  <path
+                    d="M19 6 L12 15 L16 15 L13 26 L20 17 L16 17 L19 6 Z"
+                    fill="white"
+                    stroke="none"
+                    filter="url(#glow)"
+                  />
+                  <circle cx="8" cy="8" r="1.5" fill="rgba(255,255,255,0.3)" />
+                  <circle cx="24" cy="24" r="1.5" fill="rgba(255,255,255,0.3)" />
+                  <circle cx="24" cy="8" r="1" fill="rgba(255,255,255,0.4)" />
+                  <circle cx="8" cy="24" r="1" fill="rgba(255,255,255,0.4)" />
+                </svg>
+                <span className="text-xl font-semibold text-white">FullStack</span>
+              </Link>
             </div>
             <div className="flex items-center space-x-3">
               <Link
@@ -68,7 +70,6 @@ export default function HomePage() {
             {/* メインタイトル */}
             <div className="space-y-4">
               <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-                Next-Level
                 <span className="block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   Development
                 </span>
